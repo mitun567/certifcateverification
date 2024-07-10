@@ -7,6 +7,11 @@
 				"type": "uint256"
 			},
 			{
+				"internalType": "address",
+				"name": "_submittedBy",
+				"type": "address"
+			},
+			{
 				"internalType": "string",
 				"name": "_certificateName",
 				"type": "string"
@@ -17,14 +22,14 @@
 				"type": "string"
 			},
 			{
-				"internalType": "int256",
+				"internalType": "uint256",
 				"name": "_cgpaObtained",
-				"type": "int256"
+				"type": "uint256"
 			},
 			{
-				"internalType": "int256",
+				"internalType": "uint256",
 				"name": "_cgpaMaximum",
-				"type": "int256"
+				"type": "uint256"
 			},
 			{
 				"internalType": "string",
@@ -35,6 +40,11 @@
 				"internalType": "string",
 				"name": "_uriData",
 				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "_certificateVisibility",
+				"type": "bool"
 			}
 		],
 		"name": "addNewCertificates",
@@ -43,13 +53,7 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "initialOwner",
-				"type": "address"
-			}
-		],
+		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
@@ -85,6 +89,12 @@
 				"type": "uint256"
 			},
 			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "submittedBy",
+				"type": "address"
+			},
+			{
 				"indexed": false,
 				"internalType": "string",
 				"name": "certificateName",
@@ -98,15 +108,15 @@
 			},
 			{
 				"indexed": false,
-				"internalType": "int256",
+				"internalType": "uint256",
 				"name": "cgpaObtained",
-				"type": "int256"
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
-				"internalType": "int256",
+				"internalType": "uint256",
 				"name": "cgpaMaximum",
-				"type": "int256"
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
@@ -119,6 +129,12 @@
 				"internalType": "string",
 				"name": "uriData",
 				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "certificateVisibility",
+				"type": "bool"
 			}
 		],
 		"name": "CertificateAdded",
@@ -172,6 +188,24 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "_certificateID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "_certificateVisibility",
+				"type": "bool"
+			}
+		],
+		"name": "setCertificateVisibility",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "newOwner",
 				"type": "address"
@@ -198,6 +232,11 @@
 				"type": "uint256"
 			},
 			{
+				"internalType": "address",
+				"name": "submittedBy",
+				"type": "address"
+			},
+			{
 				"internalType": "string",
 				"name": "certificateName",
 				"type": "string"
@@ -208,14 +247,14 @@
 				"type": "string"
 			},
 			{
-				"internalType": "int256",
+				"internalType": "uint256",
 				"name": "cgpaObtained",
-				"type": "int256"
+				"type": "uint256"
 			},
 			{
-				"internalType": "int256",
+				"internalType": "uint256",
 				"name": "cgpaMaximum",
-				"type": "int256"
+				"type": "uint256"
 			},
 			{
 				"internalType": "string",
@@ -226,6 +265,11 @@
 				"internalType": "string",
 				"name": "uriData",
 				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "certificateVisibility",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -247,6 +291,11 @@
 				"type": "uint256"
 			},
 			{
+				"internalType": "address",
+				"name": "submittedBy",
+				"type": "address"
+			},
+			{
 				"internalType": "string",
 				"name": "certificateName",
 				"type": "string"
@@ -257,14 +306,14 @@
 				"type": "string"
 			},
 			{
-				"internalType": "int256",
+				"internalType": "uint256",
 				"name": "cgpaObtained",
-				"type": "int256"
+				"type": "uint256"
 			},
 			{
-				"internalType": "int256",
+				"internalType": "uint256",
 				"name": "cgpaMaximum",
-				"type": "int256"
+				"type": "uint256"
 			},
 			{
 				"internalType": "string",
@@ -273,26 +322,12 @@
 			},
 			{
 				"internalType": "string",
-				"name": "_uriData",
+				"name": "uriData",
 				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_certificateID",
-				"type": "uint256"
-			}
-		],
-		"name": "getCertificateID",
-		"outputs": [
+			},
 			{
 				"internalType": "bool",
-				"name": "",
+				"name": "certificateVisibility",
 				"type": "bool"
 			}
 		],
