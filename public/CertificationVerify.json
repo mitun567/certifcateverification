@@ -1,0 +1,315 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_certificateID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_certificateName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_CertificateRecepient",
+				"type": "string"
+			},
+			{
+				"internalType": "int256",
+				"name": "_cgpaObtained",
+				"type": "int256"
+			},
+			{
+				"internalType": "int256",
+				"name": "_cgpaMaximum",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "_institution",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_uriData",
+				"type": "string"
+			}
+		],
+		"name": "addNewCertificates",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "initialOwner",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "OwnableInvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "OwnableUnauthorizedAccount",
+		"type": "error"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "certificateID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "certificateName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "CertificateRecepient",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "int256",
+				"name": "cgpaObtained",
+				"type": "int256"
+			},
+			{
+				"indexed": false,
+				"internalType": "int256",
+				"name": "cgpaMaximum",
+				"type": "int256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "institution",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "uriData",
+				"type": "string"
+			}
+		],
+		"name": "CertificateAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "certificateID",
+				"type": "uint256"
+			}
+		],
+		"name": "CertificateChecked",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "allCertificates",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "certificateID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "certificateName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "CertificateRecepient",
+				"type": "string"
+			},
+			{
+				"internalType": "int256",
+				"name": "cgpaObtained",
+				"type": "int256"
+			},
+			{
+				"internalType": "int256",
+				"name": "cgpaMaximum",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "institution",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "uriData",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_certificateID",
+				"type": "uint256"
+			}
+		],
+		"name": "getCertificateDetails",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "certificateID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "certificateName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "CertificateRecepient",
+				"type": "string"
+			},
+			{
+				"internalType": "int256",
+				"name": "cgpaObtained",
+				"type": "int256"
+			},
+			{
+				"internalType": "int256",
+				"name": "cgpaMaximum",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "institution",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_uriData",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_certificateID",
+				"type": "uint256"
+			}
+		],
+		"name": "getCertificateID",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

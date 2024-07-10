@@ -1,0 +1,27 @@
+/* styles.css */
+.bg-ethereum-blue {
+  background-color: #0074f9;
+}
+.gradient-background {
+  background: linear-gradient(
+    to bottom right,
+    #7b5e93,
+    #7279a8,
+    #5ca0a9,
+    #72c1b0,
+    #8ae3b2
+  );
+}
+.bggBlock {
+  background: linear-gradient(
+    to right,
+    #0b132b,
+    #235789,
+    #3e7cb1,
+    #00a7e1,
+    #00d4ff
+  );
+}
+.custom-input-width {
+  width: 120px; /* Adjust the width as needed */
+}

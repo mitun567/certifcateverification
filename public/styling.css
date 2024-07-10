@@ -1,0 +1,14 @@
+.gradient-background {
+  background: linear-gradient(
+    to bottom right,
+    #7b5e93,
+    #7279a8,
+    #5ca0a9,
+    #72c1b0,
+    #8ae3b2
+  );
+}
+.header-background {
+  /* background: linear-gradient(to bottom right, #333333, #555555); */
+  background: linear-gradient(to right, #fc5185, #6a3093);
+}
