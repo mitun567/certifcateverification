@@ -10,8 +10,7 @@ const FormData = require("form-data");
 
 const Outstanding = ({}) => {
   // const mycontract = "0xEb56E5b74e92B3132aC7889a13B0a115DE4F3bc1";
-  // const mycontract = "0xD0F186DB1e473dB0EeEf43972B30d23b72b1b83d";
-  const mycontract = "0x8C0e83f3C569FD831B1126E1FA92c7a92204155A";
+  const mycontract = "0x89F5c147c5fa06529d510F7157f254f692F04512";
 
   const { address, isConnected } = useAccount();
   const { data: balance, refetch } = useBalance({ address });
@@ -81,34 +80,26 @@ const Outstanding = ({}) => {
   //generating unique number
 
   async function generateUniqueNumber(min, max) {
-    let randomNumber, checkingNumber;
+    let randomNumber, certificateDetails;
   
     while (true) {
       randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
   
       try {
-        checkingNumber = await contract?.getCertificateID(randomNumber);
+        certificateDetails = await contract?.getCertificateDetails(randomNumber);
+        if (certificateDetails && certificateDetails.certificateID.toNumber() === randomNumber) {
+          console.log("Found: Not a unique number");
+        } else {
+          console.log("The unique number is:", randomNumber);
+          return randomNumber;
+        }
       } catch (error) {
-        console.error("Error calling getCertificateID:", error);
-        // If there is an error calling getCertificateID, assume the number is unique
-        return randomNumber;
-      }
-  
-      console.log("checking......", typeof randomNumber);
-  
-      if (
-        checkingNumber &&
-        checkingNumber.length > 0 &&
-        checkingNumber[0].toNumber() === randomNumber
-      ) {
-        console.log("Found: Not a unique number");
-      } else {
-        console.log("The unique number is:", randomNumber);
+        console.error("Error calling getCertificateDetails:", error);
+        // If there is an error calling getCertificateDetails, assume the number is unique
         return randomNumber;
       }
     }
   }
-  
 
   useEffect(() => {
     if (address) {
@@ -119,7 +110,8 @@ const Outstanding = ({}) => {
             const signer = provider.getSigner();
             const userAddress = await signer.getAddress();
             setAddressE(userAddress);
-            console.log("im inside outstanding useeffect");
+            console.log("im inside outstanding useeffect",addressE);
+            console.log("im inside outstanding useeffect",userAddress);
             const contract = new ethers.Contract(
               mycontract,
               CertificationVerify,
@@ -248,47 +240,7 @@ const Outstanding = ({}) => {
     }
   }, [image]);
 
-  // async function onSubmitImage() {
-  //   const JWT =
-  //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJjYzAzYmM3My05N2U1LTQyYzMtYWI5Zi05MzYyZTQzZGZmYjQiLCJlbWFpbCI6Im1pdHVuQGRldm9sdmVkYWkuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siaWQiOiJGUkExIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9LHsiaWQiOiJOWUMxIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6IjY4MTViZTMwZTg4YjMzZWE2ZTFkIiwic2NvcGVkS2V5U2VjcmV0IjoiY2E5YzhhMzg3MTY4Mjg0ZmFmNGI5YmFmNTgxMDgwODMwMzZjMGEwYzc5NWRkYzc0NTg2NWYzMWU3OGI0MzY5NiIsImlhdCI6MTcyMDU5OTA3NH0.-No9UwgmlDz3XwZAq2AFzZdqNOlUP_9-J0QCgtUe6Ek.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJjYWYyNjJjNS1lZTU2LTQyZGYtODg3MS0zYzYzYTAxYTA0OTMiLCJlbWFpbCI6Im1pdHVuc2hpbDc0N0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6IkZSQTEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX0seyJpZCI6Ik5ZQzEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiNDEyY2Q4NTFiOWNkYWE0ZDA4MTMiLCJzY29wZWRLZXlTZWNyZXQiOiIzMjNiMGY3NWRjYWJiNmRlYzZlNDFiZDA1M2RkNzI0MTQ0YzUxYzU3MDg2YTVkN2Q1NzcyNGI1Zjc1OGMzNDIyIiwiaWF0IjoxNjk2MzUzMjIxfQ.PDSS6hceiaRiE5Mj5H1goo9Q_e50dxPpUxiDP4SX8bk";
-  //   // event.preventDefault();
-
-  //   const formData = new FormData();
-  //   // const file = fs.createReadStream(image);
-  //   formData.append("file", image);
-
-  //   const pinataMetadata = JSON.stringify({
-  //     name: fileName,
-  //   });
-  //   console.log("PINATA METADATA STRINGIFY:", pinataMetadata);
-
-  //   formData.append("pinataMetadata", pinataMetadata);
-
-  //   const pinataOptions = JSON.stringify({
-  //     cidVersion: 0,
-  //   });
-  //   formData.append("pinataOptions", pinataOptions);
-
-  //   try {
-  //     const res = await axios.post(
-  //       "https://api.pinata.cloud/pinning/pinFileToIPFS",
-  //       formData,
-  //       {
-  //         maxBodyLength: "Infinity",
-  //         headers: {
-  //           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-  //           Authorization: `Bearer ${JWT}`,
-  //         },
-  //       }
-  //     );
-  //     console.log("res.data", res.data.IpfsHash);
-  //     setIpfshashData(`https://ipfs.io/ipfs/${res.data.IpfsHash}`);
-  //     console.log(".......", ipfshashData);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-  const onSubmitImage = async () => {
+  async function onSubmitImage() {
     const JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJjYzAzYmM3My05N2U1LTQyYzMtYWI5Zi05MzYyZTQzZGZmYjQiLCJlbWFpbCI6Im1pdHVuQGRldm9sdmVkYWkuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siaWQiOiJGUkExIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9LHsiaWQiOiJOWUMxIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6IjY4MTViZTMwZTg4YjMzZWE2ZTFkIiwic2NvcGVkS2V5U2VjcmV0IjoiY2E5YzhhMzg3MTY4Mjg0ZmFmNGI5YmFmNTgxMDgwODMwMzZjMGEwYzc5NWRkYzc0NTg2NWYzMWU3OGI0MzY5NiIsImlhdCI6MTcyMDU5OTA3NH0.-No9UwgmlDz3XwZAq2AFzZdqNOlUP_9-J0QCgtUe6Ek";
     const formData = new FormData();
   
@@ -320,345 +272,316 @@ const Outstanding = ({}) => {
     }
   }
   
-  // async function submittingFormData() {
-  //   if (balance.formatted > 0.1) {
-  //     try {
-  //       try {
-  //         setUseEffectCompleted(false);
-  //         console.log("Now starting submittingFormData");
-  //         console.log("printing ipfs data before", ipfshashData);
-  //         // if (image) {
-  //         //   await onSubmitImage();
-  //         // }
-  //         console.log("Now just FInished submittingFormData");
-
-  //         console.log("printing ipfs data after", ipfshashData);
-
-  //         const data2 = formdata.certificateName;
-  //         const data3 = formdata.CertificateRecepient;
-  //         const data4 = formdata.cgpaObtained;
-  //         const data5 = formdata.cgpaMaximum;
-  //         const data6 = formdata.institution;
-  //         const TrueFalse = formdata.certificateVisibility;
-  //         setDataa2(data2);
-  //         setDataa3(data3);
-  //         // const data7 = formdata.uriData;
-  //         console.log("dataaaaa certificateid/data11", data11);
-  //         // console.log("dataaaaa uri", typeof data7);
-  //         console.log("TypeOf data11", data11);
-  //         console.log("TypeOf address", address);
-  //         console.log("TypeOf certificatename", data2);
-  //         console.log("TypeOf CertificateRecepient", data3);
-  //         console.log("TypeOf cgpaObtained", data4);
-  //         console.log("TypeOf cgpaMaximum", data5);
-  //         console.log("TypeOf institution", data6);
-  //         console.log("TypeOf uri", ipfshashData);
-  //         console.log("TypeOf isPublic", typeof TrueFalse);
-  //         console.log("TypeOf isPublic", TrueFalse);
-
-  //         console.log("data1 is:", data11);
-  //         console.log("IPHS is:", ipfshashData);
-  //         if (
-  //           // data1 === "" ||
-  //           !fileName ||
-  //           data2 === "" ||
-  //           data3 === "" ||
-  //           data4 === "" ||
-  //           data5 === "" ||
-  //           data6 === "" ||
-  //           TrueFalse === ""
-  //           // data7 === ""
-  //         ) {
-  //           //setShowForm(true);
-  //           setLoader(false);
-  //           setLoader2(false);
-  //           setwrongMessage2("All fields required.");
-  //           //successMessage(false);
-  //         } else {
-  //           setwrongMessage2("");
-  //           setLoader2(true);
-  //           setShowForm(false);
-  //           if (ipfshashData) {
-  //             try {
-  //               const valueToSend = ethers.utils.parseUnits("0.1", "ether");
-  //               const gasEstimate =
-  //                 await contract.estimateGas.addNewCertificates(
-  //                   data11,
-  //                   address,
-  //                   data2,
-  //                   data3,
-  //                   data5,
-  //                   data4,
-  //                   data6,
-  //                   ipfshashData,
-  //                   TrueFalse,
-  //                   { value: valueToSend } // Pass the value parameter to the estimation
-  //                 );
-
-  //               // Send the transaction with the gas limit and value
-  //               const mydeporesult = await contract.addNewCertificates(
-  //                 data11,
-  //                 address,
-  //                 data2,
-  //                 data3,
-  //                 data5,
-  //                 data4,
-  //                 data6,
-  //                 ipfshashData,
-  //                 TrueFalse,
-  //                 {
-  //                   gasLimit: gasEstimate.add(50000),
-  //                   value: valueToSend,
-  //                 }
-  //               );
-
-  //               setLoader(true);
-  //               setLoader2(false);
-  //               console.log("Transaction Hash:", mydeporesult.hash);
-  //               await mydeporesult.wait();
-  //               console.log("Transaction confirmed!");
-  //               setImage(null);
-  //               setFileName("");
-  //               formdata.certificateName = "";
-  //               formdata.CertificateRecepient = "";
-  //               formdata.cgpaObtained = "";
-  //               formdata.cgpaMaximum = "";
-  //               formdata.institution = "";
-                
-
-  //               setShowForm(false);
-  //               setSuccessMessage(
-  //                 "Congratulations! Your data has been successfully stored in BLOCKCHAIN."
-  //               );
-  //               setLoader(false);
-  //               console.log(
-  //                 "CHeck image here",
-  //                 `https://ipfs.io/ipfs/${ipfshashData}`
-  //               );
-  //               setwrongMessage(false);
-  //               setShowForm(false);
-  //               setShowForm2(false);
-  //               setwrongMessage2(false);
-  //               setRealtimeBalanceS(!realtimeBalance);
-  //               await updateBalance();
-  //             } catch (error) {
-  //               setLoader(false);
-  //               setLoader2(false);
-  //               setuserPersonalError(true);
-  //               setwrongMessage(false);
-  //               setShowForm(false);
-  //               setShowForm2(false);
-  //               setwrongMessage2(false);
-  //               setImage(null);
-  //               setFileName("");
-  //               console.error(
-  //                 "Error submitting data to the contract:",
-  //                 error.message
-  //               );
-  //               console.log("hwlllo type error", typeof error.message);
-  //               console.log("hwlllo type error", typeof error);
-  //               console.log("hwlllo type error", error);
-  //               console.log(error.message[0]);
-  //               console.log(error.message.slice(0, error.message.indexOf("(")));
-  //               console.log(error[1]);
-  //               console.log(error[2]);
-  //             }
-  //           } else {
-  //             console.log(
-  //               "ipfs data not received to submit to contract",
-  //               ipfshashData
-  //             );
-  //           }
-  //         }
-  //       } catch (error) {
-  //         console.error("Error submitting data to the contract:", error);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error", error);
-  //     }
-  //     setFormSubmitted(true);
-  //     // onUpdateBalance(balance.formatted);
-  //     setRealtimeBalance(balance);
-  //     // setRealtimeBalanceS(!realtimeBalance);
-
-  //     ///
-
-  //     //
-  //   } else {
-  //     setBalanceError(true);
-  //     setShowForm(false);
-  //     setFormSubmitted(false);
-  //   }
-  // }
   async function submittingFormData() {
     if (balance.formatted > 0.1) {
       try {
-        setUseEffectCompleted(false);
-        console.log("Now starting submittingFormData");
-        console.log("printing ipfs data before", ipfshashData);
-  
-        console.log("Now just Finished submittingFormData");
-        console.log("printing ipfs data after", ipfshashData);
-  
-        const data2 = formdata.certificateName;
-        const data3 = formdata.CertificateRecepient;
-        const data4 = formdata.cgpaObtained;
-        const data5 = formdata.cgpaMaximum;
-        const data6 = formdata.institution;
-        setDataa2(data2);
-        setDataa3(data3);
-  
-        console.log("dataaaaa certificateid/data11", data11);
-        console.log("TypeOf data11", data11);
-        console.log("TypeOf address", address);
-        console.log("TypeOf certificatename", data2);
-        console.log("TypeOf CertificateRecepient", data3);
-        console.log("TypeOf cgpaObtained", data4);
-        console.log("TypeOf cgpaMaximum", data5);
-        console.log("TypeOf institution", data6);
-        console.log("TypeOf uri", ipfshashData);
-  
-        console.log("data1 is:", data11);
-        console.log("IPHS is:", ipfshashData);
-        if (!fileName || data2 === "" || data3 === "" || data4 === "" || data5 === "" || data6 === "") {
-          setLoader(false);
-          setLoader2(false);
-          setwrongMessage2("All fields required.");
-        } else {
-          setwrongMessage2("");
-          setLoader2(true);
-          setShowForm(false);
-          if (ipfshashData) {
-            try {
-              const valueToSend = ethers.utils.parseUnits("0.1", "ether");
-              const gasEstimate = await contract.estimateGas.addNewCertificates(
-                data11,
-                data2,
-                data3,
-                data4,
-                data5,
-                data6,
-                ipfshashData,
-                { value: valueToSend } // Pass the value parameter to the estimation
-              );
-  
-              // Send the transaction with the gas limit and value
-              const mydeporesult = await contract.addNewCertificates(
-                data11,
-                data2,
-                data3,
-                data4,
-                data5,
-                data6,
-                ipfshashData,
-                {
-                  gasLimit: gasEstimate.add(50000),
-                  value: valueToSend,
-                }
-              );
-  
-              setLoader(true);
-              setLoader2(false);
-              console.log("Transaction Hash:", mydeporesult.hash);
-              await mydeporesult.wait();
-              console.log("Transaction confirmed!");
-              setImage(null);
-              setFileName("");
-              formdata.certificateName = "";
-              formdata.CertificateRecepient = "";
-              formdata.cgpaObtained = "";
-              formdata.cgpaMaximum = "";
-              formdata.institution = "";
-  
-              setShowForm(false);
-              setSuccessMessage("Congratulations! Your data has been successfully stored in BLOCKCHAIN.");
-              setLoader(false);
-              console.log("Check image here", `https://ipfs.io/ipfs/${ipfshashData}`);
-              setwrongMessage(false);
-              setShowForm(false);
-              setShowForm2(false);
-              setwrongMessage2(false);
-              setRealtimeBalanceS(!realtimeBalance);
-              await updateBalance();
-            } catch (error) {
-              setLoader(false);
-              setLoader2(false);
-              setuserPersonalError(true);
-              setwrongMessage(false);
-              setShowForm(false);
-              setShowForm2(false);
-              setwrongMessage2(false);
-              setImage(null);
-              setFileName("");
-              console.error("Error submitting data to the contract:", error.message);
-            }
+        try {
+          setUseEffectCompleted(false);
+          console.log("Now starting submittingFormData");
+          console.log("printing ipfs data before", ipfshashData);
+          // if (image) {
+          //   await onSubmitImage();
+          // }
+          console.log("Now just FInished submittingFormData");
+
+          console.log("printing ipfs data after", ipfshashData);
+
+          const data2 = formdata.certificateName;
+          const data3 = formdata.CertificateRecepient;
+          const data4 = formdata.cgpaObtained;
+          const data5 = formdata.cgpaMaximum;
+          const data6 = formdata.institution;
+          const TrueFalse = formdata.certificateVisibility;
+          setDataa2(data2);
+          setDataa3(data3);
+          // const data7 = formdata.uriData;
+          console.log("dataaaaa certificateid/data11", data11);
+          // console.log("dataaaaa uri", typeof data7);
+          console.log("TypeOf data11", data11);
+          console.log("TypeOf address", address);
+          console.log("TypeOf certificatename", data2);
+          console.log("TypeOf CertificateRecepient", data3);
+          console.log("TypeOf cgpaObtained", data4);
+          console.log("TypeOf cgpaMaximum", data5);
+          console.log("TypeOf institution", data6);
+          console.log("TypeOf uri", ipfshashData);
+          console.log("TypeOf isPublic", typeof TrueFalse);
+          console.log("TypeOf isPublic", TrueFalse);
+
+          console.log("data1 is:", data11);
+          console.log("IPHS is:", ipfshashData);
+          if (
+            // data1 === "" ||
+            !fileName ||
+            data2 === "" ||
+            data3 === "" ||
+            data4 === "" ||
+            data5 === "" ||
+            data6 === "" ||
+            TrueFalse === ""
+            // data7 === ""
+          ) {
+            //setShowForm(true);
+            setLoader(false);
+            setLoader2(false);
+            setwrongMessage2("All fields required.");
+            //successMessage(false);
           } else {
-            console.log("ipfs data not received to submit to contract", ipfshashData);
+            setwrongMessage2("");
+            setLoader2(true);
+            setShowForm(false);
+            if (ipfshashData) {
+              try {
+                const valueToSend = ethers.utils.parseUnits("0.1", "ether");
+                const gasEstimate =
+                  await contract.estimateGas.addNewCertificates(
+                    data11,
+                    address,
+                    data2,
+                    data3,
+                    data5,
+                    data4,
+                    data6,
+                    ipfshashData,
+                    TrueFalse,
+                    { value: valueToSend } // Pass the value parameter to the estimation
+                  );
+
+                // Send the transaction with the gas limit and value
+                const mydeporesult = await contract.addNewCertificates(
+                  data11,
+                  address,
+                  data2,
+                  data3,
+                  data5,
+                  data4,
+                  data6,
+                  ipfshashData,
+                  TrueFalse,
+                  {
+                    gasLimit: gasEstimate.add(50000),
+                    value: valueToSend,
+                  }
+                );
+
+                setLoader(true);
+                setLoader2(false);
+                console.log("Transaction Hash:", mydeporesult.hash);
+                await mydeporesult.wait();
+                console.log("Transaction confirmed!");
+                setImage(null);
+                setFileName("");
+                formdata.certificateName = "";
+                formdata.CertificateRecepient = "";
+                formdata.cgpaObtained = "";
+                formdata.cgpaMaximum = "";
+                formdata.institution = "";
+                
+
+                setShowForm(false);
+                setSuccessMessage(
+                  "Congratulations! Your data has been successfully stored in BLOCKCHAIN."
+                );
+                setLoader(false);
+                console.log(
+                  "CHeck image here",
+                  `https://ipfs.io/ipfs/${ipfshashData}`
+                );
+                setwrongMessage(false);
+                setShowForm(false);
+                setShowForm2(false);
+                setwrongMessage2(false);
+                setRealtimeBalanceS(!realtimeBalance);
+                await updateBalance();
+              } catch (error) {
+                setLoader(false);
+                setLoader2(false);
+                setuserPersonalError(true);
+                setwrongMessage(false);
+                setShowForm(false);
+                setShowForm2(false);
+                setwrongMessage2(false);
+                setImage(null);
+                setFileName("");
+                console.error(
+                  "Error submitting data to the contract:",
+                  error.message
+                );
+                console.log("hwlllo type error", typeof error.message);
+                console.log("hwlllo type error", typeof error);
+                console.log("hwlllo type error", error);
+                console.log(error.message[0]);
+                console.log(error.message.slice(0, error.message.indexOf("(")));
+                console.log(error[1]);
+                console.log(error[2]);
+              }
+            } else {
+              console.log(
+                "ipfs data not received to submit to contract",
+                ipfshashData
+              );
+            }
           }
+        } catch (error) {
+          console.error("Error submitting data to the contract:", error);
         }
       } catch (error) {
-        console.error("Error submitting data to the contract:", error);
+        console.error("Error", error);
       }
       setFormSubmitted(true);
+      // onUpdateBalance(balance.formatted);
       setRealtimeBalance(balance);
+      // setRealtimeBalanceS(!realtimeBalance);
+
+      ///
+
+      //
     } else {
       setBalanceError(true);
       setShowForm(false);
       setFormSubmitted(false);
     }
   }
-  
 
+  // async function retrievingFormData() {
+  //   setLoader3(true);
+  //   console.log("Retrieving form data function called");
+  //   console.log("Certificate ID:", formdataa.certificateID);
+  //   // setErrorForPrivate(false);
+  //   setCertificateDetails(false);
+  //   setShowForm(false);
+  //   setShowForm2(false);
+  
+  //   try {
+  //     const mydeporesult = await contract?.getCertificateDetails(formdataa.certificateID);
+  //     console.log("Retrieved data:", mydeporesult);
+  //     console.log("Certificate ID is zero:", mydeporesult[0].toNumber());
+  //     console.log("Certificate ID is zero:", mydeporesult[8]);
+  
+  //     // Check if the certificate ID is zero
+  //     if (mydeporesult[0].toNumber()==formdataa.certificateID && mydeporesult[1]==addressE) {
+  //       console.log("Successfully fetched data");
+  //       console.log("Certificate ID:", mydeporesult[0].toString());
+  
+  //       // Set the certificate details
+  //       setCertificateDetails(mydeporesult);
+        
+  //       setLoader3(false);
+  //       setErrorForPrivate(false);
+  //       setShowForm(false);
+  //       setShowForm2(false);
+  //       setSuccessMessage("Verification Successful!!");
+  
+  //       // Reset the form input
+  //       formdataa.certificateID = "";
+  //     } else {
+  //       console.log("Access denied: Certificate ID is zero");
+  //       setLoader3(false);
+  //       setErrorForPrivate(true);
+  //     }
+  //   } catch (error) {
+  //     setLoader3(false);
+  //     console.error("Error retrieving data:", error);
+  
+  //     if (mydeporesult[0].toNumber()==formdataa.certificateID && mydeporesult[1]!=addressE) {
+  //       console.log("Access denied error caught");
+  //       setErrorForPrivate(true);
+  //     } 
+  //     if(mydeporesult[0].toNumber()!=formdataa.certificateID && mydeporesult[4].toNumber()==0 && mydeporesult[5].toNumber()==0) {
+  //       console.log("General error");
+  //       setwrongMessage("Not Verified!!");
+  //       setCertificateDetails(false);
+  //       setShowForm(false);
+  //       setShowForm2(false);
+  //       setErrorForPrivate(false);
+  //     }
+  //   }
+  // }
   async function retrievingFormData() {
     setLoader3(true);
     console.log("Retrieving form data function called");
     console.log("Certificate ID:", formdataa.certificateID);
-    setErrorForPrivate(false);
     setCertificateDetails(false);
     setShowForm(false);
     setShowForm2(false);
+  
+    const mydeporesult = await contract?.getCertificateDetails(formdataa.certificateID);
+  
+    
+    console.log("Retrieved data:", mydeporesult);
+    console.log(mydeporesult[0].toNumber())
+    console.log(addressE)
 
-    try {
-      const mydeporesult = await contract?.getCertificateDetails(
-        formdataa.certificateID
-      );
-      console.log("hiiiiiiiiiiiiiiii");
-      console.log("hello:", mydeporesult);
-      console.log("hello id:", mydeporesult[0]);
-      console.log("output", mydeporesult);
-      setCertificateDetails(mydeporesult);
-
-      if (mydeporesult[1]== "") {
-        // setErrorForPrivate(true);
+    if (mydeporesult[0].toNumber() == formdataa.certificateID && mydeporesult[1] == addressE) {
+      console.log("Successfully fetched data");
+      console.log("Certificate ID:", mydeporesult[0].toString());
+  
+        // Set the certificate details
+        setCertificateDetails(mydeporesult);
         setLoader3(false);
-        console.log("Succesfully fetched data");
         setErrorForPrivate(false);
         setShowForm(false);
         setShowForm2(false);
         setSuccessMessage("Verification Successful!!");
-        console.log("check the image:", `https://ipfs.io/ipfs/${ipfshashData}`);
+  
+        // Reset the form input
         formdataa.certificateID = "";
-      } else {
-        console.log("Access denied");
+    }
+    if (mydeporesult[0].toNumber() == formdataa.certificateID && mydeporesult[1] != addressE && mydeporesult[8] == 1) {
+      console.log("Successfully fetched data");
+      console.log("Certificate ID:", mydeporesult[0].toString());
+  
+        // Set the certificate details
+        setCertificateDetails(mydeporesult);
         setLoader3(false);
-      }
-    } catch (error) {
-      setLoader3(false);
-      // console.log(certificateDetails.hash);
-      console.error("hello Error:", error);
-      if (error.message.toLowerCase().includes("access denied")) {
-        console.log("wow we got access denied");
+        setErrorForPrivate(false);
+        setShowForm(false);
+        setShowForm2(false);
+        setSuccessMessage("Verification Successful!!");
+  
+        // Reset the form input
+        formdataa.certificateID = "";
+    }
+  
+      if (mydeporesult[0].toNumber() == formdataa.certificateID && mydeporesult[1] != addressE && mydeporesult[8] != 1) {
+        console.log("Access denied: Certificate ID matches but address does not match");
+        setLoader3(false);
         setErrorForPrivate(true);
-      } else {
-        console.log("its first loop");
+      }
+
+  
+      if (mydeporesult[0].toNumber() != formdataa.certificateID && mydeporesult[4].toNumber() === 0 && mydeporesult[5].toNumber() === 0) {
+        console.log("General error: Certificate ID does not match and specific fields are zero");
+        setLoader3(false);
         setwrongMessage("Not Verified!!");
         setCertificateDetails(false);
         setShowForm(false);
         setShowForm2(false);
         setErrorForPrivate(false);
       }
-    }
+  
+      // if (
+      //     !(mydeporesult[0].toNumber() !== formdataa.certificateID && mydeporesult[4].toNumber() === 0 && mydeporesult[5].toNumber() === 0)) {
+      //   // console.log("General error: Unrecognized condition");
+      //   // setLoader3(false);
+      //   // setwrongMessage("An unknown error occurred.");
+      //   // setCertificateDetails(false);
+      //   // setShowForm(false);
+      //   // setShowForm2(false);
+      //   // setErrorForPrivate(false);
+      //   console.log("Access denied: Certificate ID matches but address does not match");
+      //   setLoader3(false);
+      //   setErrorForPrivate(true);
+      // }
+    // }
+  
+  
   }
+  
+  
+  
+    
+  
   useEffect(() => {
     console.log("Now formdata state of visibility in useeffect:", formdataaa);
   }, [formdataaa]);
@@ -1010,19 +933,19 @@ const Outstanding = ({}) => {
                       <p className="text-left">
                         Certificate Name:{" "}
                         {certificateDetails && certificateDetails.length > 0
-                          ? certificateDetails[1]
+                          ? certificateDetails[2]
                           : "N/A"}
                       </p>
                       <p className="text-left">
                         Recipient:{" "}
                         {certificateDetails && certificateDetails.length > 0
-                          ? certificateDetails[2]
+                          ? certificateDetails[3]
                           : "N/A"}
                       </p>
                       <p className="text-left">
                         CGPA Obtained:{" "}
                         {certificateDetails && certificateDetails.length > 0
-                          ? certificateDetails[3].toNumber() / 100
+                          ? certificateDetails[5].toNumber() / 100
                           : "N/A"}
                       </p>
                       <p className="text-left">
@@ -1034,7 +957,7 @@ const Outstanding = ({}) => {
                       <p className="text-left">
                         Institution:{" "}
                         {certificateDetails && certificateDetails.length > 0
-                          ? certificateDetails[5]
+                          ? certificateDetails[6]
                           : "N/A"}
                       </p>
                     </div>
@@ -1061,7 +984,7 @@ const Outstanding = ({}) => {
                 )}
 
                 <Image
-                  src={certificateDetails[6]}
+                  src={certificateDetails[7]}
                   alt="Image Description"
                   width={500}
                   height={300}
@@ -1146,7 +1069,7 @@ const Outstanding = ({}) => {
               )}
             </div>
           )}
-          {isConnected && errorForPrivate && (
+          {isConnected && errorForPrivate &&(
             <div className="bg-red-400 p-6 text-xl font-bold mt-4">
               <p>You dont have access to this data.</p>
             </div>
